@@ -2,11 +2,11 @@ package org.fola.data.models;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+
 @Data
-public class User {
+public class Income {
     @Id
     private String id;
-    private String name;
-    private String email;
-    private String password;
+    private String source;
+    private double amount;
 }

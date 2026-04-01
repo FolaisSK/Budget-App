@@ -3,10 +3,10 @@ package org.fola.data.models;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 @Data
-public class User {
+public class Transaction {
     @Id
     private String id;
-    private String name;
-    private String email;
-    private String password;
+    private String title;
+    private double amount;
+    private TransactionType type;
 }
