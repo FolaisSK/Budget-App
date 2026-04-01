@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BudgetService {
@@ -63,6 +62,42 @@ public class BudgetService {
         response.setDescription(expense.getDescription());
         response.setType(String.valueOf(expense.getType()));
         response.setAmount(expense.getAmount());
+
+        Budget budget = budgetRepository.findByTitle(request.getBudgetTitle().trim())
+                .orElseThrow(()-> new BudgetDoesNotExistException("Budget does not exist!"));
+        List<Expense> outflows = budget.getOutflows();
+        outflows.add(expense);
+        budget.setOutflows(outflows);
+        budgetRepository.save(budget);
+
         return response;
+    }
+
+    public double calculateTotalIncome(String title){
+        Budget budget = budgetRepository.findByTitle(title.trim())
+                .orElseThrow(()-> new BudgetDoesNotExistException("Budget does not exist!"));
+        List<Income> inflows = budget.getInflows();
+
+        double total = 0;
+        for(Income income: inflows){
+            total += income.getAmount();
+        }
+
+        return total;
+    }
+
+    public double calculateTotalExpense(String title){
+        Budget budget = budgetRepository.findByTitle(title.trim())
+                .orElseThrow(()-> new BudgetDoesNotExistException("Budget does not exist!"));
+        List<Expense> outflows = budget.getOutflows();
+
+        double total = 0;
+        for(Expense expense: outflows) total += expense.getAmount();
+
+        return total;
+    }
+
+    public double calculateNetIncome(String title){
+        return calculateTotalIncome(title) - calculateTotalExpense(title);
     }
 }
