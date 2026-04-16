@@ -1,5 +1,7 @@
 package org.fola.controllers;
 
+import org.fola.dtos.requests.AddExpenseRequest;
+import org.fola.dtos.requests.AddIncomeRequest;
 import org.fola.dtos.requests.CreateBudgetRequest;
 import org.fola.dtos.responses.ApiResponse;
 import org.fola.services.BudgetService;
@@ -37,6 +39,51 @@ public class BudgetController {
     public ApiResponse viewAllBudgets(){
         try {
             return new ApiResponse(true, HttpStatus.OK.name(), budgetService.getAllBudgets());
+        } catch (Exception e) {
+            return new ApiResponse(false, HttpStatus.BAD_REQUEST.name(), e.getMessage());
+        }
+    }
+
+    @PostMapping("/add-income")
+    public ApiResponse addIncome(@RequestBody AddIncomeRequest request){
+        try{
+            return new ApiResponse(true, HttpStatus.OK.name(), budgetService.addIncome(request));
+        } catch (Exception e) {
+            return new ApiResponse(false, HttpStatus.BAD_REQUEST.name(), e.getMessage());
+        }
+    }
+
+    @PostMapping("/add-expense")
+    public ApiResponse addExpense(@RequestBody AddExpenseRequest request){
+        try{
+            return new ApiResponse(true, HttpStatus.OK.name(), budgetService.addExpense(request));
+        } catch (Exception e) {
+            return new ApiResponse(false, HttpStatus.BAD_REQUEST.name(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/total-income/{budgetTitle}")
+    public ApiResponse viewTotalIncome(@PathVariable("budgetTitle") String budgetTitle){
+        try{
+            return new ApiResponse(true, HttpStatus.OK.name(), budgetService.calculateTotalIncome(budgetTitle));
+        } catch (Exception e) {
+            return new ApiResponse(false, HttpStatus.BAD_REQUEST.name(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/total-expense/{budgetTitle}")
+    public ApiResponse viewTotalExpense(@PathVariable("budgetTitle") String budgetTitle){
+        try{
+            return new ApiResponse(true, HttpStatus.OK.name(), budgetService.calculateTotalExpense(budgetTitle));
+        } catch (Exception e) {
+            return new ApiResponse(false, HttpStatus.BAD_REQUEST.name(), e.getMessage());
+        }
+    }
+
+    @GetMapping("/net-income/{budgetTitle}")
+    public ApiResponse viewNetIncome(@PathVariable("budgetTitle") String budgetTitle){
+        try{
+            return new ApiResponse(true, HttpStatus.OK.name(), budgetService.calculateNetIncome(budgetTitle));
         } catch (Exception e) {
             return new ApiResponse(false, HttpStatus.BAD_REQUEST.name(), e.getMessage());
         }

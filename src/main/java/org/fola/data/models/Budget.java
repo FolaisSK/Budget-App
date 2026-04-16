@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,7 +15,7 @@ public class Budget {
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;
-    private List<Income> inflows;
-    private List<Expense> outflows;
+    private List<Income> inflows = new ArrayList<>();
+    private List<Expense> outflows = new ArrayList<>();
     private LocalDateTime createdAt = LocalDateTime.now();
 }
